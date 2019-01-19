@@ -150,7 +150,7 @@ INSERT INTO usuario
 	       (DEFAULT, 'Karla de Souza', 'karlasz@gmail.com', NULL, 1, 2, 25, '24/09/1999', DEFAULT),
 	       (DEFAULT, 'Diógenes Batista dos Santos', 'diogenesb@outlook.com', 'M', 2, 10, 2, '07/11/2004', DEFAULT),
 	       (DEFAULT, 'Juliano Righetto', 'jrighetto@gmail.com', 'M', 17, 17, DEFAULT, '19/10/2002', DEFAULT),
-	       (DEFAULT, 'Francisco Silva', '@fsilva15gmail.com', 'M', 11, NULL, DEFAULT, '11/09/2001', DEFAULT),
+	       (DEFAULT, 'Francisco Silva', 'fsilva15@gmail.com', 'M', 11, NULL, DEFAULT, '11/09/2001', DEFAULT),
 	       (DEFAULT, 'Mariana dos Santos Neves', 'msneves@outlook.com', 'F', 2, 10, 14, '09/11/2006', DEFAULT),
 	       (DEFAULT, 'Juliana Battisti', 'julianabattisti@gmail.com', NULL, 1, 4, 20, '18/04/2001', DEFAULT),
 	       (DEFAULT, 'Luiza Patrícia dos Santos', 'luizinhap@gmail.com', 'F', 1, 3, 20, '10/04/2001', DEFAULT),
@@ -403,6 +403,8 @@ CREATE OR REPLACE VIEW view_ranking AS
 	HAVING r.resposta = TRUE
 	ORDER BY pontos DESC;
 
+SELECT * FROM view_ranking;
+
 -- (c.iii) Prover acesso a uma das visões para consulta (para usuário 02).
 GRANT SELECT ON view_escolas TO mpedu;
 		   
@@ -428,11 +430,16 @@ SELECT func_pontuacao_media();
 -- Função para inserir novos usuários
 CREATE OR REPLACE FUNCTION func_add_usuario 
 	(nome VARCHAR, email VARCHAR, sexo CHAR, cidade INT, escola INT, nasc DATE)
-	RETURNS VOID
+	RETURNS INTEGER
 AS $$
 	BEGIN
 		INSERT INTO usuario
 			VALUES (DEFAULT, nome, email, sexo, cidade, escola, DEFAULT, nasc, DEFAULT);
+		RETURN 1;
+		EXCEPTION
+			WHEN unique_violation THEN
+				RAISE EXCEPTION 'Email já cadastrado.';
+				RETURN -1;
 	END;
 $$ LANGUAGE 'plpgsql';
 
@@ -528,13 +535,19 @@ AS $$
 	DECLARE
 		idade INTEGER;
 	BEGIN
+		IF id_usr < 1 THEN
+			RAISE EXCEPTION 'Informe um valor positivo.';
+		END IF;
+														
 		SELECT (EXTRACT(YEAR FROM CURRENT_DATE) - EXTRACT(YEAR FROM dt_nasc)) AS idade 
 		INTO idade FROM usuario WHERE id = id_usr;
+		
 		RETURN idade;
 	END;
 $$ LANGUAGE 'plpgsql';
 
 SELECT func_idade (1);
+SELECT func_idade (0);
 
 -- Função 3: Retorna o nome do usuário a partir do ID.
 CREATE OR REPLACE FUNCTION func_nome_usuario_by_id (id_usr INTEGER)
@@ -584,7 +597,7 @@ CREATE TRIGGER trgr_delete_resposta
 		EXECUTE PROCEDURE func_add_pontos();
 
 SELECT * FROM resposta;
-DELETE FROM resposta WHERE id = 3;
+DELETE FROM resposta WHERE id = 2;
 SELECT * FROM usuario;
 
 -- Trigger para atualizar os pontos do usuário em caso de uma resposta ser atualizada na tabela resposta
@@ -601,7 +614,7 @@ SELECT * FROM usuario;
 -- (g.i) Identificar 02 exemplos de consultas dentro do contexto da aplicação que possam e devam ser melhoradas. Reescrevê-las. Justificar a reescrita.
 
 -- Consulta 1: Alteração da Consulta 10
--- Justificativa: A consulta precisava informar, além do nome, o estado e a cidade da escola, pois há
+-- Justificativa: A consulta precis	ava informar, além do nome, o estado e a cidade da escola, pois há
 -- possibilidade de ter duas ou mais escolas com o mesmo nome.								  
 SELECT esc.nome AS escola, uf.nome AS estado, cid.nome AS cidade, SUM(us.pontos) AS pontos FROM usuario AS us
 	JOIN escola AS esc ON us.id_escola = esc.id

@@ -1,70 +1,15 @@
-> Projeto da Disciplina de Banco de Dados 2 - Parte Relacional, conforme **roteiro** entregue pela professora. 
-
-# 1. Descrição da aplicação e das regras de negócio
-
-## Descrição
-Jogo educacional de perguntas e respostas com foco nos estudantes do ensino fundamental.
-
-## Cliente
-- Unicef Brasil
-- Responsável: Zélia Teles
-
-## Prestador de Serviços
-- Identificação: IFPB Soluções em Software Ltda.
-- Equipe: Adjamilton Junior (Analista de TI) e Karoline Lima (Analista de TI).
-
-## Descrição da Solução Proposta
-### Objetivo
-Possibilitar que estudantes do ensino fundamental possam incrementar o aprendizado adquirido na sala de aula por meio da utilização de um jogo educacional de perguntas e respostas para dispositivos móveis. 
-
-### Descrição
-O sistema consiste de duas partes: uma plataforma web, para cadastro de usuários, questões, disciplinas e demais informações inerentes ao jogo e um aplicativo para dispositivo móvel. Os usuário receberam pontos, de acordo com o nível da questão, para cada pergunta corretamente respondida. Cada questão será composta por cinco alternativas, sendo apenas uma verdadeira. Cada questão terá um tema que está diretamente ligada a uma disciplina. Os usuários podem vincular uma escola ao seu perfil. Os usuários poderão ver sua colocação no ranking geral de pontos dos usuários, bem como sua colocação no ranking por estado, cidade e escola.
-
-### Requisitos Funcionais
-- Cadastrar usuários
-- Cadastrar questões (incluindo nível e alternativas)
-- Cadastrar escolas
-- Cadastrar disciplinas
-- Cadastrar temas
-- Cadastrar cidades
-- Gerar relatório de rankings baseado na pontuação dos usuários (geral, por estado e por escola)
-
-### Requisitos de Dados
-- Usuário
-- Questão
-- Resposta
-- Escola
-- Disciplina
-- Tema
-- Nível
-- Alternativa
-
-# 2. Modelo Entidade-Relacionamento em nível Conceitual e Lógico (diagramas)
-
-## Modelo Conceitual
-![](modeloconceitual/ifpb-bd2-conceitual.png)
-
-## Modelo Lógico
-![](modelologico/ifpb-bd2-logico.png)
-
-# 3. Implementação do projeto no SGBD PostgreSQL 
-## (a) Privilégios e Segurança 
-### (i) Criação de 02 usuários – um será o owner do BD; o outro irá ter acesso a alguns objetos 
-```sql
+-- 3. Implementação do projeto no SGBD PostgreSQL 
+-- (a) Privilégios e Segurança 
+-- (a.i) Criação de 02 usuários – um será o owner do BD; o outro irá ter acesso a alguns objetos 
 CREATE ROLE mapaedu WITH SUPERUSER LOGIN PASSWORD 'mapaedu';
 CREATE ROLE mpedu WITH LOGIN PASSWORD 'mpedu';
-```
 
-### (ii) Criação do BD e sua associação a um usuário (owner) 
-```sql
-CREATE DATABASE mapaedu_db;
+-- (a.ii) Criação do BD e sua associação a um usuário (owner) 
+-- CREATE DATABASE mapaedu_db;
 ALTER DATABASE mapaedu_db OWNER TO mapaedu;
-```
 
-## (b) Objetos básicos
-### (i) Tabelas e constraints (PK, FK, UNIQUE, campos que podem ter valores nulos, checks de validação) de acordo com projeto.
-
-```sql 
+-- (b) Objetos básicos
+-- (b.i) Tabelas e constraints (PK, FK, UNIQUE, campos que podem ter valores nulos, checks de validação) de acordo com projeto. 
 SET DATESTYLE TO DMY;
 
 CREATE TABLE IF NOT EXISTS estado (
@@ -77,32 +22,32 @@ CREATE TABLE IF NOT EXISTS estado (
 
 INSERT INTO estado
     VALUES ('AC', 'Acre'),
-	   ('AL', 'Alagoas'),
-	   ('AP', 'Amapá'),
-	   ('AM', 'Amazonas'),
-	   ('BA', 'Bahia'),
-	   ('CE', 'Ceará'),
-	   ('DF', 'Distrito Federal'),
-	   ('ES', 'Espírito Santo'),
-	   ('GO', 'Goiás'),
-	   ('MA', 'Maranhão'),
-	   ('MG', 'Minas Gerais'),
-	   ('MS', 'Mato Grosso do Sul'),
-	   ('MT', 'Mato Grosso'),
-	   ('PA', 'Pará'),
-	   ('PB', 'Paraíba'),
-	   ('PE', 'Pernambuco'),
-	   ('PI', 'Piauí'),
-	   ('PR', 'Paraná'),
-	   ('RJ', 'Rio de Janeiro'),
-	   ('RN', 'Rio Grande do Norte'),
-	   ('RO', 'Rondônia'),
-	   ('RR', 'Roraima'),
-	   ('RS', 'Rio Grande do Sul'),
-	   ('SC', 'Santa Catarina'),
-	   ('SE', 'Sergipe'),
-	   ('SP', 'São Paulo'),
-	   ('TO', 'Tocantins');
+		   ('AL', 'Alagoas'),
+		   ('AP', 'Amapá'),
+		   ('AM', 'Amazonas'),
+		   ('BA', 'Bahia'),
+		   ('CE', 'Ceará'),
+		   ('DF', 'Distrito Federal'),
+		   ('ES', 'Espírito Santo'),
+		   ('GO', 'Goiás'),
+		   ('MA', 'Maranhão'),
+		   ('MG', 'Minas Gerais'),
+		   ('MS', 'Mato Grosso do Sul'),
+		   ('MT', 'Mato Grosso'),
+		   ('PA', 'Pará'),
+		   ('PB', 'Paraíba'),
+		   ('PE', 'Pernambuco'),
+		   ('PI', 'Piauí'),
+		   ('PR', 'Paraná'),
+		   ('RJ', 'Rio de Janeiro'),
+		   ('RN', 'Rio Grande do Norte'),
+		   ('RO', 'Rondônia'),
+		   ('RR', 'Roraima'),
+		   ('RS', 'Rio Grande do Sul'),
+		   ('SC', 'Santa Catarina'),
+	       ('SE', 'Sergipe'),
+		   ('SP', 'São Paulo'),
+		   ('TO', 'Tocantins');
 				 
 CREATE TABLE IF NOT EXISTS cidade (
 	id SERIAL NOT NULL,
@@ -146,8 +91,8 @@ CREATE TABLE IF NOT EXISTS tipo (
 		   
 INSERT INTO tipo
 	VALUES (DEFAULT, 'Privada'),
-               (DEFAULT, 'Estadual'),
-               (DEFAULT, 'Municipal');
+           (DEFAULT, 'Estadual'),
+           (DEFAULT, 'Municipal');
 
 CREATE TABLE IF NOT EXISTS escola (
 	id SERIAL NOT NULL,
@@ -201,25 +146,25 @@ CREATE TABLE IF NOT EXISTS usuario (
 
 INSERT INTO usuario
     VALUES (DEFAULT, 'Paulo Ricardo', 'pricardo@gmail.com', 'M', 1, 1, 20, '20/05/2005', DEFAULT),
-	   (DEFAULT, 'João Rodrigues de Almeida', 'jra@gmail.com', 'M', 1, 4, 18, '01/03/2008', DEFAULT),
-	   (DEFAULT, 'Karla de Souza', 'karlasz@gmail.com', NULL, 1, 2, 25, '24/09/1999', DEFAULT),
-	   (DEFAULT, 'Diógenes Batista dos Santos', 'diogenesb@outlook.com', 'M', 2, 10, 2, '07/11/2004', DEFAULT),
-	   (DEFAULT, 'Juliano Righetto', 'jrighetto@gmail.com', 'M', 17, 17, DEFAULT, '19/10/2002', DEFAULT),
-	   (DEFAULT, 'Francisco Silva', 'fsilva15@gmail.com', 'M', 11, NULL, DEFAULT, '11/09/2001', DEFAULT),
-	   (DEFAULT, 'Mariana dos Santos Neves', 'msneves@outlook.com', 'F', 2, 10, 14, '09/11/2006', DEFAULT),
-	   (DEFAULT, 'Juliana Battisti', 'julianabattisti@gmail.com', NULL, 1, 4, 20, '18/04/2001', DEFAULT),
-	   (DEFAULT, 'Luiza Patrícia dos Santos', 'luizinhap@gmail.com', 'F', 1, 3, 20, '10/04/2001', DEFAULT),
-	   (DEFAULT, 'Maria Eduarda Félix de Almeida', 'mduda@gmail.com', 'F', 1, 4, 7, '17/07/2007', DEFAULT),
-	   (DEFAULT, 'Patrícia Rouanet', 'patrciart@gmail.com', 'F', 2, 10, 11, '23/06/2002', DEFAULT),
-	   (DEFAULT, 'Mary de Souza', 'marysouzajp@gmail.com', 'F', 1, NULL, 18, '10/10/1997', DEFAULT),
-	   (DEFAULT, 'João de Souza e Silva', 'joaoss@yahoo.com.br', NULL, 14, NULL, DEFAULT, '18/07/2003', DEFAULT),
-	   (DEFAULT, 'Luciano Patrício', 'lucianopatricio@outlook.com', 'M', 17, 17, 14, '21/01/2004', DEFAULT),
-	   (DEFAULT, 'Jaqueline Belgrado', 'jaquebel@gmail.com', 'F', 2, 11, 10, '12/07/2002', DEFAULT),
-	   (DEFAULT, 'Arcênio Segundo', 'arcenio@gmail.com', 'M', 2, NULL, 9, '11/02/1999', DEFAULT),
-	   (DEFAULT, 'Diniz Medeiros', 'dinizmed@gmail.com', 'M', 2, 11, 6, '21/01/2003', DEFAULT),
-	   (DEFAULT, 'Diogo Silva', 'dslv@outlook.com', 'M', 1, 6, DEFAULT, '31/08/2000', DEFAULT),
-	   (DEFAULT, 'Jackie Santini', 'jackiesantini@gmail.com', 'F', 1, 5, 4, '31/12/1995', DEFAULT),
-	   (DEFAULT, 'Rafael Medeiros', 'rafamedeiros@gmail.com', 'M', 1, 6, 7, '20/10/2008', DEFAULT);
+	       (DEFAULT, 'João Rodrigues de Almeida', 'jra@gmail.com', 'M', 1, 4, 18, '01/03/2008', DEFAULT),
+	       (DEFAULT, 'Karla de Souza', 'karlasz@gmail.com', NULL, 1, 2, 25, '24/09/1999', DEFAULT),
+	       (DEFAULT, 'Diógenes Batista dos Santos', 'diogenesb@outlook.com', 'M', 2, 10, 2, '07/11/2004', DEFAULT),
+	       (DEFAULT, 'Juliano Righetto', 'jrighetto@gmail.com', 'M', 17, 17, DEFAULT, '19/10/2002', DEFAULT),
+	       (DEFAULT, 'Francisco Silva', '@fsilva15gmail.com', 'M', 11, NULL, DEFAULT, '11/09/2001', DEFAULT),
+	       (DEFAULT, 'Mariana dos Santos Neves', 'msneves@outlook.com', 'F', 2, 10, 14, '09/11/2006', DEFAULT),
+	       (DEFAULT, 'Juliana Battisti', 'julianabattisti@gmail.com', NULL, 1, 4, 20, '18/04/2001', DEFAULT),
+	       (DEFAULT, 'Luiza Patrícia dos Santos', 'luizinhap@gmail.com', 'F', 1, 3, 20, '10/04/2001', DEFAULT),
+	       (DEFAULT, 'Maria Eduarda Félix de Almeida', 'mduda@gmail.com', 'F', 1, 4, 7, '17/07/2007', DEFAULT),
+	       (DEFAULT, 'Patrícia Rouanet', 'patrciart@gmail.com', 'F', 2, 10, 11, '23/06/2002', DEFAULT),
+	       (DEFAULT, 'Mary de Souza', 'marysouzajp@gmail.com', 'F', 1, NULL, 18, '10/10/1997', DEFAULT),
+	       (DEFAULT, 'João de Souza e Silva', 'joaoss@yahoo.com.br', NULL, 14, NULL, DEFAULT, '18/07/2003', DEFAULT),
+	       (DEFAULT, 'Luciano Patrício', 'lucianopatricio@outlook.com', 'M', 17, 17, 14, '21/01/2004', DEFAULT),
+	       (DEFAULT, 'Jaqueline Belgrado', 'jaquebel@gmail.com', 'F', 2, 11, 10, '12/07/2002', DEFAULT),
+	       (DEFAULT, 'Arcênio Segundo', 'arcenio@gmail.com', 'M', 2, NULL, 9, '11/02/1999', DEFAULT),
+	       (DEFAULT, 'Diniz Medeiros', 'dinizmed@gmail.com', 'M', 2, 11, 6, '21/01/2003', DEFAULT),
+	       (DEFAULT, 'Diogo Silva', 'dslv@outlook.com', 'M', 1, 6, DEFAULT, '31/08/2000', DEFAULT),
+	       (DEFAULT, 'Jackie Santini', 'jackiesantini@gmail.com', 'F', 1, 5, 4, '31/12/1995', DEFAULT),
+	       (DEFAULT, 'Rafael Medeiros', 'rafamedeiros@gmail.com', 'M', 1, 6, 7, '20/10/2008', DEFAULT);
 
 CREATE TABLE IF NOT EXISTS disciplina (
 	id SMALLSERIAL NOT NULL,
@@ -240,7 +185,7 @@ INSERT INTO disciplina
 	       (DEFAULT, 'Educação Física');
 		   
 CREATE TABLE IF NOT EXISTS tema (
-	id SMALLSERIAL NOT NULL,
+    id SMALLSERIAL NOT NULL,
 	nome VARCHAR(40) NOT NULL,
 	id_disciplina INT NOT NULL,
 	
@@ -280,13 +225,13 @@ CREATE TABLE IF NOT EXISTS nivel (
 		   
 INSERT INTO nivel
 	VALUES (DEFAULT, 'Super Fácil', DEFAULT),
-	       (DEFAULT, 'Fácil', 3),
-	       (DEFAULT, 'Médio', 5),
-	       (DEFAULT, 'Difícil', 7),
-	       (DEFAULT, 'Extremamente Difícil', 10);
+		   (DEFAULT, 'Fácil', 3),
+		   (DEFAULT, 'Médio', 5),
+		   (DEFAULT, 'Difícil', 7),
+		   (DEFAULT, 'Extremamente Difícil', 10);
 		   
 CREATE TABLE IF NOT EXISTS questao (
-	id BIGSERIAL NOT NULL,
+    id BIGSERIAL NOT NULL,
 	descricao VARCHAR(256) NOT NULL,
 	imagem BYTEA NULL,
 	id_nivel SMALLINT NOT NULL,
@@ -299,13 +244,13 @@ CREATE TABLE IF NOT EXISTS questao (
 		   
 INSERT INTO questao
 	VALUES (DEFAULT, 'Na frase “Degue Mata. Se a gente bobear, ela volta. É hora de esquentar a briga contra o mosquito.”, a palavra ELA substitui a palavra:', NULL, 1, 3),
-               (DEFAULT, 'Qual o tipo da frase: "Como se chama o teu gato?".', NULL, 1, 4),
-               (DEFAULT, 'Indique a palavra que tem 5 fonemas:', NULL, 1, 5),
-               (DEFAULT, 'Qual a variedade linguística da frase: "Na hora de cumê, nois come; Na hora de bebe, nois bebe".', NULL, 1, 2),
-               (DEFAULT, 'A palavra que possui mais letra do que fonema, é:', NULL, 5, 5);
+           (DEFAULT, 'Qual o tipo da frase: "Como se chama o teu gato?".', NULL, 1, 4),
+           (DEFAULT, 'Indique a palavra que tem 5 fonemas:', NULL, 1, 5),
+           (DEFAULT, 'Qual a variedade linguística da frase: "Na hora de cumê, nois come; Na hora de bebe, nois bebe".', NULL, 1, 2),
+           (DEFAULT, 'A palavra que possui mais letra do que fonema, é:', NULL, 5, 5);
 
 CREATE TABLE IF NOT EXISTS alternativa (
-	id BIGSERIAL NOT NULL,
+    id BIGSERIAL NOT NULL,
 	id_questao INT NOT NULL,
 	descricao VARCHAR(50) NOT NULL,
 	correta BOOLEAN NOT NULL DEFAULT FALSE,
@@ -342,7 +287,7 @@ INSERT INTO alternativa
            (DEFAULT, 5, 'Nenhuma das Alternativas', FALSE);
 
 CREATE TABLE IF NOT EXISTS resposta (
-	id BIGSERIAL NOT NULL,
+    id BIGSERIAL NOT NULL,
 	id_usuario INT NOT NULL,
 	id_questao INT NOT NULL,
 	resposta BOOLEAN NOT NULL,
@@ -365,11 +310,9 @@ INSERT INTO resposta
            (DEFAULT, 2, 3, TRUE, DEFAULT),
            (DEFAULT, 2, 4, TRUE, DEFAULT),
            (DEFAULT, 3, 2, FALSE, DEFAULT);
-```
+		   
+-- (b.ii) 10 consultas variadas de acordo com requisitos da aplicação, ou seja, com justificativa semântica.
 
-### (ii) 10 consultas variadas de acordo com requisitos da aplicação, ou seja, com justificativa semântica.
-
-```sql
 -- Consulta 1: Ranking TOP 10
 SELECT nome, pontos FROM usuario
 	WHERE pontos IS NOT NULL
@@ -420,13 +363,10 @@ SELECT esc.nome, SUM(us.pontos) FROM usuario AS us
 	JOIN escola AS esc ON us.id_escola = esc.id
 	GROUP BY esc.nome
 	ORDER BY 2 DESC;
-```
+	   
+-- (c) Visões
+-- (c.i) 01 visão que permita inserção
 
-## (c) Visões
-
-- 01 visão que permita inserção 
-
-```sql
 -- Visão para exibir as escolas privadas
 CREATE OR REPLACE VIEW view_escolas_privadas AS
 	SELECT nome AS escola, id_tipo, id_cidade FROM escola
@@ -439,10 +379,9 @@ INSERT INTO view_escolas_privadas (escola, id_tipo, id_cidade)
            ('H.B.E. Cólegio e Curso', 1, 1);
 
 SELECT * FROM view_escolas_privadas;
-```
-- 02 visões robustas (por exemplo, com vários joins) com justificativa semântica, de acordo com os requisitos da aplicação. 
+														
+-- (c.ii) 02 visões robustas (por exemplo, com vários joins) com justificativa semântica, de acordo com os requisitos da aplicação. 
 
-```sql
 -- Lista todas as escolas, por estado e cidade
 CREATE OR REPLACE VIEW view_escolas AS
 	SELECT uf.nome AS estado, cid.nome AS cidade, esc.nome AS escola, t.tipo FROM escola AS esc
@@ -463,18 +402,14 @@ CREATE OR REPLACE VIEW view_ranking AS
 	GROUP BY estado, cidade, usuario, usuario, us.pontos, r.resposta
 	HAVING r.resposta = TRUE
 	ORDER BY pontos DESC;
-```
 
-- Prover acesso a uma das visões para consulta (para usuário 02). 
-```sql
+-- (c.iii) Prover acesso a uma das visões para consulta (para usuário 02).
 GRANT SELECT ON view_escolas TO mpedu;
-```
+		   
+-- (d) Funções
+-- (d.i) 01 função que use SUM, MAX, MIN, AVG ou COUNT
 
-## (d) Funções
-
-- 01 função que use SUM, MAX, MIN, AVG ou COUNT 
-
-```sql
+-- Usuário com o maior número de pontos
 CREATE OR REPLACE FUNCTION func_pontuacao_media ()
 	RETURNS NUMERIC
 AS $$
@@ -487,24 +422,17 @@ AS $$
 $$ LANGUAGE 'plpgsql';
 
 SELECT func_pontuacao_media();
-```
+														
+-- (d.ii) 01 função que popule, de forma volumosa, uma das tabelas para testes e justificativa sobre índices.
 
-- 01 função que popule, de forma volumosa, uma das tabelas para testes e justificativa sobre índices. 
-
-```sql
 -- Função para inserir novos usuários
 CREATE OR REPLACE FUNCTION func_add_usuario 
 	(nome VARCHAR, email VARCHAR, sexo CHAR, cidade INT, escola INT, nasc DATE)
-	RETURNS INTEGER
+	RETURNS VOID
 AS $$
 	BEGIN
 		INSERT INTO usuario
 			VALUES (DEFAULT, nome, email, sexo, cidade, escola, DEFAULT, nasc, DEFAULT);
-		RETURN 1;
-		EXCEPTION
-			WHEN unique_violation THEN
-				RAISE EXCEPTION 'Email já cadastrado.';
-				RETURN -1;
 	END;
 $$ LANGUAGE 'plpgsql';
 
@@ -560,13 +488,9 @@ SELECT func_add_usuario('Mirna dos Santos', 'mirna@gmail.com', 'F', 1, 1, '26/11
 SELECT func_add_usuario('Gonçalves Silva', 'gsilva@gmail.com', 'M', 1, 1, '25/02/2006');
 														
 SELECT * FROM usuario;
-```
+														
+-- (d.iii) Mais 03 funções com justificativa semântica, dentro dos requisitos da aplicação
 
-- Mais 03 funções com justificativa semântica, dentro dos requisitos da aplicação 
-
-> Pelo menos duas das funções devem ter **tratamento de excessão**.
-
-```sql
 -- Função 1: Calcula os pontos do usuário de acordo com as respostas corretas dele e atualiza 
 -- a coluna 'pontos' da tabela usuario
 CREATE OR REPLACE FUNCTION func_add_pontos ()
@@ -604,13 +528,8 @@ AS $$
 	DECLARE
 		idade INTEGER;
 	BEGIN
-		IF id_usr < 1 THEN
-			RAISE EXCEPTION 'Informe um valor positivo.';
-		END IF;
-														
 		SELECT (EXTRACT(YEAR FROM CURRENT_DATE) - EXTRACT(YEAR FROM dt_nasc)) AS idade 
 		INTO idade FROM usuario WHERE id = id_usr;
-		
 		RETURN idade;
 	END;
 $$ LANGUAGE 'plpgsql';
@@ -633,29 +552,19 @@ AS $$
 $$ LANGUAGE 'plpgsql';
 
 SELECT func_nome_usuario_by_id (1);
-```
-
-- Prover acesso de execução de uma das funções (para usuário 02) 
-
-```sql
+														  
+-- (d.iv) Prover acesso de execução de uma das funções (para usuário 02)
 GRANT EXECUTE ON FUNCTION func_pontuacao_media TO mpedu;
-```
 
-## (e) Índices
-
-- 03 índices para campos indicados (além dos referentes às PKs) com justificativa. Usar tabela povoada com mais dados para testes e justificativa.
-
-```sql
+-- (e) Índices
+-- (e.i) 03 índices para campos indicados (além dos referentes às PKs) com justificativa. Usar tabela povoada com mais dados para testes e justificativa.
 CREATE INDEX idx_pontos ON usuario(pontos);
 CREATE INDEX idx_cidade ON usuario(id_cidade);
 CREATE INDEX idx_escola ON usuario(id_escola);
-```
 
-## (f) Triggers
+-- (f) Triggers
+-- (f.i) 03 diferentes triggers com justificativa semântica, de acordo com os requisitos da aplicação
 
-- 03 diferentes triggers com justificativa semântica, de acordo com os requisitos da aplicação
-
-```sql
 -- Trigger pra atualizar os pontos do usuário a cada questão que ele acertar
 CREATE TRIGGER trgr_add_pontos 
 	AFTER INSERT ON resposta
@@ -686,31 +595,14 @@ CREATE TRIGGER trgr_update_resposta
 
 SELECT * FROM resposta;
 UPDATE resposta SET resposta = TRUE WHERE id = 11;
-SELECT * FROM usuario;
-```
+SELECT * FROM usuario;													  
 
-## (g) Outros
+-- (g) Outro(s)
+-- (g.i) Identificar 02 exemplos de consultas dentro do contexto da aplicação que possam e devam ser melhoradas. Reescrevê-las. Justificar a reescrita.
 
-- Identificar 02 exemplos de consultas dentro do contexto da aplicação que possam e devam ser melhoradas. Reescrevê-las. Justificar a reescrita.
-
-> Alteração da [Consulta 5](https://github.com/ajunior/projeto-bd/blob/33d37769a80d3c575d611f111be3621a81f1bad1/script/bd.sql#L339)
-
-**Justificativa:** Era necessário informar a localização (estado e cidade) do usuário que estava sem escola cadastrada.
-
-```sql
-SELECT us.nome AS usuario, uf.nome AS estado, cid.nome AS cidade FROM usuario AS us
-	JOIN cidade AS cid ON us.id_cidade = cid.id
-	JOIN estado AS uf ON cid.id_uf = uf.sigla
-	GROUP BY usuario, estado, cidade, us.id_escola
-	HAVING us.id_escola IS NULL
-	ORDER BY usuario ASC;
-```
-
-> Alteração da [Consulta 10](https://github.com/ajunior/projeto-bd/blob/33d37769a80d3c575d611f111be3621a81f1bad1/script/bd.sql#L361)
-
-**Justificativa:** A consulta precisava informar, além do nome, o estado e a cidade da escola, pois há possibilidade de ter duas ou mais escolas com o mesmo nome.
-
-```sql
+-- Consulta 1: Alteração da Consulta 10
+-- Justificativa: A consulta precisava informar, além do nome, o estado e a cidade da escola, pois há
+-- possibilidade de ter duas ou mais escolas com o mesmo nome.								  
 SELECT esc.nome AS escola, uf.nome AS estado, cid.nome AS cidade, SUM(us.pontos) AS pontos FROM usuario AS us
 	JOIN escola AS esc ON us.id_escola = esc.id
 	JOIN cidade AS cid ON esc.id_cidade = cid.id
@@ -718,4 +610,12 @@ SELECT esc.nome AS escola, uf.nome AS estado, cid.nome AS cidade, SUM(us.pontos)
 	GROUP BY pontos, escola, estado, cidade
 	HAVING pontos IS NOT NULL
 	ORDER BY pontos DESC;
-```
+														  
+-- Consulta 2: Alteração da Consulta 5
+-- Justificativa: Era necessário informar a localização (estado e cidade) do usuário que estava sem escola cadastrada.
+SELECT us.nome AS usuario, uf.nome AS estado, cid.nome AS cidade FROM usuario AS us
+	JOIN cidade AS cid ON us.id_cidade = cid.id
+	JOIN estado AS uf ON cid.id_uf = uf.sigla
+	GROUP BY usuario, estado, cidade, us.id_escola
+	HAVING us.id_escola IS NULL
+	ORDER BY usuario ASC;

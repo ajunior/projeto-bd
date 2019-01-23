@@ -597,7 +597,7 @@ CREATE TRIGGER trgr_delete_resposta
 		EXECUTE PROCEDURE func_add_pontos();
 
 SELECT * FROM resposta;
-DELETE FROM resposta WHERE id = 2;
+DELETE FROM resposta WHERE id = 10;
 SELECT * FROM usuario;
 
 -- Trigger para atualizar os pontos do usuário em caso de uma resposta ser atualizada na tabela resposta
